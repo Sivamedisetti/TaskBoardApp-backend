@@ -1,5 +1,5 @@
 const projectSchema = require("../models/project");
-const { taskModel } = require("../models/task");
+const {taskSchema}  = require("../models/task");
 
 const add_projects = async (req, res) => {
   const { title, pid, tasks } = req.body;
@@ -20,7 +20,7 @@ const add_projects = async (req, res) => {
 const add_task = async (req, res) => {
   const { pid, taskName, startDate, deadlineDate, status, taskId } = req.body;
   try {
-    const newTask = taskModel({
+    const newTask = taskSchema({
       taskName: taskName,
       startDate: startDate,
       deadlineDate: deadlineDate,
@@ -52,7 +52,7 @@ const get_project = async (req, res) => {
 const get_tasks = async (req, res) => {
   const { pid } = req.params;
   try {
-    const task = await taskModel.find({ pid: pid });
+    const task = await taskSchema.find({ pid: pid });
     res.status(200).send(task.length ? task : []);
   } catch (err) {
     res.status(404).send({ msg: "Error retrieving tasks" });
@@ -62,7 +62,7 @@ const get_tasks = async (req, res) => {
 const update_tasks = async (req, res) => {
   const { taskName, startDate, deadlineDate, status, pid, taskId } = req.body;
   try {
-    const tasks_updated = await taskModel.findOneAndUpdate(
+    const tasks_updated = await taskSchema.findOneAndUpdate(
       { taskId: taskId },
       {
         taskName: taskName,
@@ -73,17 +73,11 @@ const update_tasks = async (req, res) => {
       },
       { new: true }
     );
-
-    if (!tasks_updated) {
-      return res.status(404).json({ msg: "Task not found" });
-    }
-
     res.status(200).json(tasks_updated);
   } catch (error) {
     res.status(500).json({ status: "Failed", msg: "Error updating task" });
   }
 };
-
 module.exports = {
   add_projects,
   add_task,

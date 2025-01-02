@@ -31,5 +31,5 @@ const taksSchema = new schema({
   },
 });
 
-const taskModel = mongoose.model("tasks", taksSchema);
-module.exports = { taksSchema, taskModel };
+const taskSchema = mongoose.model("tasks", taksSchema);
+module.exports = { taksSchema, taskSchema};
